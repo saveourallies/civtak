@@ -68,6 +68,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+            terraform_version: "^1.10"
+            terraform_wrapper: false
+
       - name: Terraform Action
         env:
           ARM_SKIP_PROVIDER_REGISTRATION: true
