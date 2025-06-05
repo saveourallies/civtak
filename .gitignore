@@ -2,3 +2,5 @@
 .structurizr
 .terraform*
 terraform.tfstate
+
+keys/

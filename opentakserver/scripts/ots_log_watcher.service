@@ -1,0 +1,31 @@
+[Unit]
+Description=OpenTAKServer Log Watcher and Connection Monitor
+After=network.target systemd-journald.service
+
+[Service]
+# User to run the script as. 
+# IMPORTANT: If not root, this user needs passwordless sudo rights for 'lsof -nPiTCP' if 'ss' doesn't provide all details.
+# Or, modify the script to not use 'sudo lsof' and accept potentially less detail.
+User=root
+Group=root
+
+# Full path to the script
+ExecStart=/usr/local/bin/watch_ots_connections.sh /home/devadmin/ots/logs/opentakserver.log
+
+# Working directory for the script (if $PWD is used for default log path in script)
+# If you ALWAYS provide the full log path in ExecStart, this is less critical.
+# However, our script's DEFAULT_LOG_FILE uses $PWD, so set this to where your script expects to find ots/logs/ relative to.
+# For example, if logs are in /home/devadmin/ots/logs and script is run from /home/devadmin, set this to /home/devadmin
+WorkingDirectory=/home/devadmin
+
+# Restart behavior
+Restart=always
+RestartSec=10
+
+# Logging: systemd will capture stdout and stderr into the journal by default.
+# You can view logs with 'journalctl -u ots_log_watcher.service'
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target 
